@@ -3,7 +3,7 @@ import WeatherCard from "./components/WeatherCard/WeatherCard";
 
 function App() {
   return (
-    <div className="App">
+    <div className="h-screen flex justify-center items-center">
       <WeatherCard/>
     </div>
   );

@@ -1,8 +1,17 @@
+import Temperature from '../../../Temperature'
+import Weather from './Weather'
+import Meta from './Meta'
+import CityName from '../../../CityName'
+
 const CurrentCityWeather = ()=>{
     return (
-        <div>
+        <>
             CurrentCityWeather
-        </div>
+            <Temperature/>
+            <Weather/>
+            <Meta/>
+            <CityName/>
+        </>
     )
 }
 
