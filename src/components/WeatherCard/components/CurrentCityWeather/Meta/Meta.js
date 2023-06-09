@@ -3,11 +3,10 @@ import Wind from "./Wind"
 
 const Meta = ()=>{
     return (
-        <>
-            Meta
+        <div>
             <Humidity/>
             <Wind/>
-        </>
+        </div>
     )
 }
 
