@@ -5,10 +5,8 @@ import Temperature from '../../../../Temperature'
 const DayOfWeekList = ()=>{
     return (
         <>
-            DayOfWeekList
             <DayOfWeek/>
             <WeatherIcon/>
-            <Temperature/>
         </>
     )
 }

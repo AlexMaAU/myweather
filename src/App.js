@@ -16,12 +16,18 @@ function App() {
         >
       */}
       {/* <div>负责布局，控制它的直系子元素<WeatherCard/> 
-      那么为什么要给WeatherCard组件前面加上<div>? 因为组件本身没办法给自己布局，组件里传递的是props，所以要对WeatherCard组件进行布局，就需要在外面再套一个容器
+      那么为什么要给WeatherCard组件前面加上<div>? 
+      因为组件自己的职责是子组件嵌套。组件的CSS styling职责应该交给别的元素来负责，所以增加父级<div>负责CSS styling。
+      可以把<div>和组件视作一个整体
       */}
       <div className="h-screen flex justify-center items-center">
         <WeatherCard/>
       </div>
     </BackgroundImage>
+    // 组件的本质就是一个变量，对应的是一段HTML代码。
+    // 组件最终会拼接起来，变成完整的HTML。
+    // 拼接顺序是从最顶部的HTML元素开始，一层一层往下查找子组件然后拼接到最顶部的元素中作为其子元素
+    // 这也就是为什么BackgroundImage组件里要把image和children作为props传递下去的原因
   );
 }
 

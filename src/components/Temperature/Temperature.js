@@ -1,7 +1,7 @@
-const Temperature = ()=>{
+const Temperature = ({tempValue})=>{
     return (
-        <div>
-            Temperature
+        <div className="text-slate-500 text-7xl font-semibold">
+            {`${tempValue} ℃`}
         </div>
     )
 }
