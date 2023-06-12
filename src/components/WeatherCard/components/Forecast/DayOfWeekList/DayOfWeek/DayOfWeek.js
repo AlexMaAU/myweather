@@ -1,8 +1,8 @@
-const DayOfWeek = ()=>{
+const DayOfWeek = ({dayOfWeek})=>{
     return (
-        <>
-            DayOfWeek
-        </>
+        <div className={"text-center"}>
+            {dayOfWeek}
+        </div>
     )
 }
 

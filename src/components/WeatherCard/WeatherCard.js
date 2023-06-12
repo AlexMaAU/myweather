@@ -9,7 +9,7 @@ const WeatherCard = ()=>{
         <div className="bg-white rounded-3xl overflow-hidden shadow-2xl shadow-black/50">
             <CurrentCityWeather/>
             {/* 给组件外面嵌套一个容器(比如<div>)，然后通过该容器来设置CSS。 */}
-            <div className="flex px-12 py-9 justify-center">
+            <div className="flex gap-12 px-12 py-9 justify-center">
                 {/* OtherCities 和 Forecast的UI格式是一样的，都是 Title+Element, 这部分也可以提取出来，新增一个组件叫 SubSection */}
                 {/* 
                     <OtherCities/>

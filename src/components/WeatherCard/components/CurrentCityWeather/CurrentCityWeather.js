@@ -12,7 +12,7 @@ const CurrentCityWeather = ()=>{
             {/* 给组件外面嵌套一个容器(比如<div>)，然后通过该容器来设置其直系子元素的CSS */}
             <div className="flex justify-between py-16 px-24 gap-48 relative">
                 <div>
-                    <Temperature tempValue={16.79}/>
+                    <Temperature className={"text-slate-500 text-7xl font-semibold"} tempValue={16.79}/>
                     <Weather weatherValue={'Rain'}/>
                     <Meta/>
                 </div>

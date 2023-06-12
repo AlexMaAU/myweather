@@ -1,8 +1,14 @@
-const WeatherIcon = ()=>{
+const WeatherIcon = ({
+    weather,
+    code,
+    className
+})=>{
     return (
-        <>
-            WeatherIcon
-        </>
+        <img 
+            src={`http://openweathermap.org/img/wn/${code}.png`} 
+            alt={weather} 
+            className={className}
+        />
     )
 }
 
