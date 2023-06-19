@@ -31,10 +31,17 @@ const KEY = '30552c1e8594ae98b41c25641fa95b1a'
 //     {name:'FRI', temperature:8, weather:{code:'09d', name:'Rain'}},
 // ]
 
+const CURRENT_CITY = {
+    name: "Sydney",
+    lat: -33.8698439,
+    lon: 151.2082848
+}
+
 const OTHER_CITIES = [
-    {name:'Melbourne', lat:-37.8142176, lon:144.9631608},
-    {name:'Brisbane', lat:-27.4689682, lon:153.0234991},
-    {name:'Perth', lat:-31.9558964, lon:115.8605801}
+    {name: "Sydney", id: 2158177},
+    {name:'Melbourne', id:2147714},
+    {name:'Brisbane', id:2174003},
+    {name:'Perth', id:2063523}
 ]
 
 const WEEK_DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT']
@@ -49,10 +56,11 @@ const WeatherCard = ()=>{
     //const [windSpeed, setWindSpeed ] = useState()
     const [current, setCurrent] = useState() //上面的状态可以合并到current一个状态下
     const [forecast, setForecast] = useState()
-    const [others, setOthers] = useState([])
+    const [others, setOthers] = useState()
 
+    // fetch data with onecall api
     useEffect(()=>{
-        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${SYDNEY_GEO.lat}&lon=${SYDNEY_GEO.lon}&units=${units}&appid=${KEY}`)
+        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${CURRENT_CITY.lat}&lon=${CURRENT_CITY.lon}&units=${units}&appid=${KEY}`)
         .then((response)=>response.json())  //接收上一个Promise返回的response对象，并调用json()方法将返回的数据解析为JSON格式
         .then((data)=>{
             // set current state
@@ -77,34 +85,26 @@ const WeatherCard = ()=>{
                     temperature:day.temp.day.toFixed(0)
                 }
             })
-            setForecast(daily)
-
-            // set other cities state
-            const otherCityData = []
-            OTHER_CITIES.map((city)=>{
-                fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lon}&units=${units}&appid=${KEY}`)
-                .then((response)=>response.json())
-                .then((data)=>{
-                    otherCityData.push({name:city.name, temperature:data.current.temp.toFixed(0), weather:data.current.weather})
-                })
-            })
-            setOthers(otherCityData)
-
-            // const list = data.daily.map(({day})=>({
-            //     name:,
-            //     temperature: temp,
-            //     weather: {
-            //         code: weather[0].icon,
-            //         name: weather[0].main
-            //     }
-            // }))
-            
+            setForecast(daily)     
         })  
         .finally(()=>{
             // 做到这一步，发现 state 定义在 Temperature 组件里，这里没办法setLoading，那就把状态提升
             setLoading(false)   //当全部数据加载完之后，改变loading状态，让页面显示内容从 loading 到 获取的数据
         })
     }, [])
+
+    // fetch data with group api
+    useEffect(()=>{
+        fetch(`https://api.openweathermap.org/data/2.5/group?id=${OTHER_CITIES.map(({id})=>id).join()}&units=${units}&appid=${KEY}`)
+        .then((response)=>response.json())  //接收上一个Promise返回的response对象，并调用json()方法将返回的数据解析为JSON格式
+        .then((data)=>{
+            console.log(data)
+            setOthers(data)
+        })
+        .finally(()=>{
+            setLoading(false)   //当全部数据加载完之后，改变loading状态，让页面显示内容从 loading 到 获取的数据
+        })  
+    }, []) 
 
     return (
         // 给组件外面嵌套一个容器(比如<div>)，然后通过该容器来设置其直系子元素的CSS

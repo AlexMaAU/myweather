@@ -1,6 +1,7 @@
 import OtherCityName from './OtherCityName'
 import Temperature from '../../../../Temperature'
 import WeatherIcon from "../../../../WeatherIcon"
+import React from 'react'
 
 const CityList = ({cityName,temperature,weather,loading})=>{
     return (
@@ -16,7 +17,7 @@ const CityList = ({cityName,temperature,weather,loading})=>{
                     <OtherCityName cityName={cityName}/>
                     {/* 那么如果组件只是样式不同，数据类型是一样的，还可以考虑Temperature组件的做法，把样式提取出来，作为props导入 */}
                     <Temperature className={"text-xl"} tempValue={temperature}/>
-                    <WeatherIcon code={weather[0].icon} weather={weather.main} className={""}/>
+                    <WeatherIcon code={weather[0].icon} weather={weather[0].main} className={" "}/>
                 </div>
             )}
         </div>
