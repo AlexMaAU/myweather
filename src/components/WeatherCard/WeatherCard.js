@@ -3,6 +3,7 @@ import Forecast from './components/Forecast'
 import OtherCities from './components/OtherCities'
 import SubSection from '../SubSection'
 import { useEffect, useState } from 'react'
+import KEY from '../../config/config'
 
 
 //通过geo.js获取了所有城市的经纬度
@@ -16,12 +17,7 @@ import { useEffect, useState } from 'react'
 //     {name:'Darwin', lat:-12.46044, lon:130.8410469},
 // ]
 
-const SYDNEY_GEO = {
-    lat: -33.8698439,
-    lon: 151.2082848
-}
 const units = 'metric'
-const KEY = '30552c1e8594ae98b41c25641fa95b1a'
 
 // const FORECAST = [
 //     {name:'MON', temperature:9, weather:{code:'11d', name:'Thunderstorm'}},
@@ -99,7 +95,9 @@ const WeatherCard = ()=>{
         .then((response)=>response.json())  //接收上一个Promise返回的response对象，并调用json()方法将返回的数据解析为JSON格式
         .then((data)=>{
             console.log(data)
-            setOthers(data)
+            const newData = data.list.filter((item)=>item.name!==CURRENT_CITY.name)
+            console.log(newData)
+            setOthers(newData)
         })
         .finally(()=>{
             setLoading(false)   //当全部数据加载完之后，改变loading状态，让页面显示内容从 loading 到 获取的数据

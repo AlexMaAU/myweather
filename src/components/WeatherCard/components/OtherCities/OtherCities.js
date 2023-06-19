@@ -23,7 +23,7 @@ const OtherCities = ({others,loading})=>{
             <CityList cityName={'Brisbane'} temperature={17} weather={{code:'10d', name:'Rain'}}/>
             <CityList cityName={'Perth'} temperature={18} weather={{code:'01d', name:'Clear'}}/> */}
             {
-                others.list?.map(({name, main, weather})=>{
+                others?.map(({name, main, weather})=>{
                     return (
                         <CityList 
                             key={name} 
