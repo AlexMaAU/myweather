@@ -14,7 +14,7 @@ import BackgroundImage from '../../../BackgroundImage'
 // const units = 'metric'
 // const KEY = '2466213f21b4b723d341e00a430a7673'
 
-const CurrentCityWeather = ({tempValue, loading, weatherValue, humidityValue, windSpeed})=>{
+const CurrentCityWeather = ({currentCity, tempValue, loading, weatherValue, humidityValue, windSpeed})=>{
     // 找到子组件接收的props来源的上层父级组件，在上层父级组件下设置 state - 状态提升
     // 比如Temperature的tempValue是个state，是从CurrentCityWeather中传下去的，就在CurrentCityWeather中定义state
     // const [tempValue, setTempValue] = useState()
@@ -52,7 +52,7 @@ const CurrentCityWeather = ({tempValue, loading, weatherValue, humidityValue, wi
                     <Weather weatherValue={weatherValue} loading={loading}/>
                     <Meta humidityValue={humidityValue} windSpeed={windSpeed} loading={loading}/>
                 </div>
-                <CityName>Sydney</CityName>
+                <CityName>{currentCity.name}</CityName>
                 <div className='h-5 w-full bg-black/30 bottom-0 left-0 absolute' />
             </div>
         </BackgroundImage>

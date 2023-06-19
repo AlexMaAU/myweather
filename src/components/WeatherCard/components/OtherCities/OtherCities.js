@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import CityList from './CityList'
 
-const OtherCities = ({others,loading})=>{
+const OtherCities = ({changeCurrentCity, others,loading, cityList})=>{
     //这里和Forecast一样，也可以把状态都提升到WeatherCard中
     // const {others, setOthers} = useState()
     // useEffect(()=>{
@@ -24,6 +24,7 @@ const OtherCities = ({others,loading})=>{
             <CityList cityName={'Perth'} temperature={18} weather={{code:'01d', name:'Clear'}}/> */}
             {
                 others?.map(({name, main, weather})=>{
+
                     return (
                         <CityList 
                             key={name} 
@@ -31,6 +32,8 @@ const OtherCities = ({others,loading})=>{
                             temperature={main.temp.toFixed(0)} 
                             weather={weather}
                             loading={loading}
+                            cityList={cityList}
+                            changeCurrentCity={changeCurrentCity}
                         />
                     )
                 })

@@ -7,15 +7,15 @@ import KEY from '../../config/config'
 
 
 //通过geo.js获取了所有城市的经纬度
-// const CITIES = [
-//     {name:'Melbourne', lat:-37.8142176, lon:144.9631608},
-//     {name:'Sydney', lat:-33.8698439, lon:151.2082848},
-//     {name:'Brisbane', lat:-27.4689682, lon:153.0234991},
-//     {name:'Adelaide', lat:-34.9281805, lon:138.5999312},
-//     {name:'Perth', lat:-31.9558964, lon:115.8605801},
-//     {name:'Hobart', lat:-42.8825088, lon:147.3281233},
-//     {name:'Darwin', lat:-12.46044, lon:130.8410469},
-// ]
+const CITIES = [
+    {name:'Melbourne', lat:-37.8142176, lon:144.9631608},
+    {name:'Sydney', lat:-33.8698439, lon:151.2082848},
+    {name:'Brisbane', lat:-27.4689682, lon:153.0234991},
+    {name:'Adelaide', lat:-34.9281805, lon:138.5999312},
+    {name:'Perth', lat:-31.9558964, lon:115.8605801},
+    {name:'Hobart', lat:-42.8825088, lon:147.3281233},
+    {name:'Darwin', lat:-12.46044, lon:130.8410469},
+]
 
 const units = 'metric'
 
@@ -27,7 +27,7 @@ const units = 'metric'
 //     {name:'FRI', temperature:8, weather:{code:'09d', name:'Rain'}},
 // ]
 
-const CURRENT_CITY = {
+let CURRENT_CITY = {
     name: "Sydney",
     lat: -33.8698439,
     lon: 151.2082848
@@ -53,10 +53,13 @@ const WeatherCard = ()=>{
     const [current, setCurrent] = useState() //上面的状态可以合并到current一个状态下
     const [forecast, setForecast] = useState()
     const [others, setOthers] = useState()
+    const [currentCity, setCurrentCity] = useState(CURRENT_CITY)
+
+    console.log(currentCity)
 
     // fetch data with onecall api
     useEffect(()=>{
-        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${CURRENT_CITY.lat}&lon=${CURRENT_CITY.lon}&units=${units}&appid=${KEY}`)
+        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${currentCity.lat}&lon=${currentCity.lon}&units=${units}&appid=${KEY}`)
         .then((response)=>response.json())  //接收上一个Promise返回的response对象，并调用json()方法将返回的数据解析为JSON格式
         .then((data)=>{
             // set current state
@@ -87,7 +90,7 @@ const WeatherCard = ()=>{
             // 做到这一步，发现 state 定义在 Temperature 组件里，这里没办法setLoading，那就把状态提升
             setLoading(false)   //当全部数据加载完之后，改变loading状态，让页面显示内容从 loading 到 获取的数据
         })
-    }, [])
+    }, [currentCity])
 
     // fetch data with group api
     useEffect(()=>{
@@ -95,21 +98,21 @@ const WeatherCard = ()=>{
         .then((response)=>response.json())  //接收上一个Promise返回的response对象，并调用json()方法将返回的数据解析为JSON格式
         .then((data)=>{
             console.log(data)
-            const newData = data.list.filter((item)=>item.name!==CURRENT_CITY.name)
+            const newData = data.list.filter((item)=>item.name!==currentCity.name)
             console.log(newData)
             setOthers(newData)
         })
         .finally(()=>{
             setLoading(false)   //当全部数据加载完之后，改变loading状态，让页面显示内容从 loading 到 获取的数据
         })  
-    }, []) 
+    }, [currentCity]) 
 
     return (
         // 给组件外面嵌套一个容器(比如<div>)，然后通过该容器来设置其直系子元素的CSS
-        <div className="bg-white rounded-3xl overflow-hidden shadow-2xl shadow-black/50">
+        <div className="bg-white rounded-3xl overflow-hidden shadow-2xl shadow-black/50 min-w-[850px]">
             {/* current可能因为API读取不到而为空值，所以要加上？进行判断 */}
             {/* CurrentCityWeather的可读性可以再次提升，可以和Forecast和OtherCities组件一样，直接把整个current作为props传入，这样保证了代码的一致性 */}
-            <CurrentCityWeather tempValue={current?.temp} loading={loading} weatherValue={current?.weather[0].main} humidityValue={current?.humidity} windSpeed={current?.wind_speed}/>
+            <CurrentCityWeather currentCity={currentCity} tempValue={current?.temp} loading={loading} weatherValue={current?.weather[0].main} humidityValue={current?.humidity} windSpeed={current?.wind_speed}/>
             {/* 给组件外面嵌套一个容器(比如<div>)，然后通过该容器来设置CSS。 */}
             <div className="flex gap-12 px-12 py-9 justify-center">
                 {/* OtherCities 和 Forecast的UI格式是一样的，都是 Title+Element, 这部分也可以提取出来，新增一个组件叫 SubSection */}
@@ -119,7 +122,7 @@ const WeatherCard = ()=>{
                     <Forecast/>
                 */}
                 <SubSection title={'OTHER CITIES'}>
-                    <OtherCities others={others} loading={loading}/>
+                    <OtherCities others={others} loading={loading} changeCurrentCity={setCurrentCity} cityList={CITIES}/>
                 </SubSection>
                 <div className='w-[3px] bg-black/20' />
                 <SubSection title={'FORECAST'}>
