@@ -13,7 +13,6 @@ const OtherCities = ({others,loading})=>{
     // useEffect(()=>{
     //     // get data from API
     // },[])
-
     return (
         <div>
             {/* <CityList cityName={'Sydney'} temperature={15} weather={{code:'04n', name:'Clouds'}}/>

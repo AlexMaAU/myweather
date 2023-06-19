@@ -12,11 +12,11 @@ const CityList = ({cityName,temperature,weather,loading})=>{
             {/* 做到这步，发现CurrentCityName的样式和目前的复用组件CityName不一样，那就新增一个组件CurrentCityName */}
             {/* 如果CityName不再是复用组件，就要放回合适的文件夹位置下 */}
             {loading?'...':(
-                <div>
+                <div className='flex items-center'>
                     <OtherCityName cityName={cityName}/>
                     {/* 那么如果组件只是样式不同，数据类型是一样的，还可以考虑Temperature组件的做法，把样式提取出来，作为props导入 */}
                     <Temperature className={"text-xl"} tempValue={temperature}/>
-                    <WeatherIcon code={weather.code} weather={weather.name} className={""}/>
+                    <WeatherIcon code={weather[0].icon} weather={weather.main} className={""}/>
                 </div>
             )}
         </div>

@@ -21,20 +21,20 @@ const SYDNEY_GEO = {
     lon: 151.2082848
 }
 const units = 'metric'
-const KEY = '2466213f21b4b723d341e00a430a7673'
+const KEY = '30552c1e8594ae98b41c25641fa95b1a'
 
-const FORECAST = [
-    {name:'MON', temperature:9, weather:{code:'11d', name:'Thunderstorm'}},
-    {name:'TUE', temperature:15, weather:{code:'01d', name:'Clear'}},
-    {name:'WED', temperature:11, weather:{code:'03d', name:'Clouds'}},
-    {name:'THU', temperature:7, weather:{code:'09d', name:'Rain'}},
-    {name:'FRI', temperature:8, weather:{code:'09d', name:'Rain'}},
-]
+// const FORECAST = [
+//     {name:'MON', temperature:9, weather:{code:'11d', name:'Thunderstorm'}},
+//     {name:'TUE', temperature:15, weather:{code:'01d', name:'Clear'}},
+//     {name:'WED', temperature:11, weather:{code:'03d', name:'Clouds'}},
+//     {name:'THU', temperature:7, weather:{code:'09d', name:'Rain'}},
+//     {name:'FRI', temperature:8, weather:{code:'09d', name:'Rain'}},
+// ]
 
 const OTHER_CITIES = [
-    {name:'Sydney', temperature:12, weather:{code:'04n', name:'Clouds'}},
-    {name:'Brisbane', temperature:21, weather:{code:'10d', name:'Rain'}},
-    {name:'Perth', temperature:19, weather:{code:'01d', name:'Clear'}},
+    {name:'Melbourne', lat:-37.8142176, lon:144.9631608},
+    {name:'Brisbane', lat:-27.4689682, lon:153.0234991},
+    {name:'Perth', lat:-31.9558964, lon:115.8605801}
 ]
 
 const WEEK_DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT']
@@ -49,17 +49,20 @@ const WeatherCard = ()=>{
     //const [windSpeed, setWindSpeed ] = useState()
     const [current, setCurrent] = useState() //上面的状态可以合并到current一个状态下
     const [forecast, setForecast] = useState()
-    const {others, setOthers} = useState()
+    const [others, setOthers] = useState([])
 
     useEffect(()=>{
         fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${SYDNEY_GEO.lat}&lon=${SYDNEY_GEO.lon}&units=${units}&appid=${KEY}`)
         .then((response)=>response.json())  //接收上一个Promise返回的response对象，并调用json()方法将返回的数据解析为JSON格式
         .then((data)=>{
+            // set current state
             setCurrent(data.current)
             // setTempValue(data.current.temp)  //接收上一个Promise返回的解析后的JSON数据，将其中的current.temp设置为tempValue的值
             // setWeatherValue(data.current.weather[0].main)
             // setHumidityValue(data.current.humidity)
             // setWindSpeed(data.current.wind_speed)
+
+            // set forecast state
             const daily = data.daily.slice(1,6).map((day)=>{
                 return {
                     // day.dt是时间戳，将一个时间戳乘以1000可以将其转换为以毫秒为单位的时间。
@@ -68,22 +71,34 @@ const WeatherCard = ()=>{
                     // WEEK_DAYS[...]：根据getDay()方法返回的值，从WEEK_DAYS数组或对象中获取对应的星期几的表示。这样可以根据索引值查找相应的星期几字符串。
                     name: WEEK_DAYS[new Date(day.dt * 1000).getDay()],
                     weather: {
-                        code: day.weather[0].icon,
-                        name: day.weather[0].main
+                        icon: day.weather[0].icon,
+                        main: day.weather[0].main
                     },
                     temperature:day.temp.day.toFixed(0)
                 }
             })
             setForecast(daily)
-            const list = data.list.map(({name, main, weather})=>({
-                name,
-                temperature: main.temp,
-                weather: {
-                    code: weather[0].icon,
-                    name: weather[0].main
-                }
-            }))
-            setOthers(list)
+
+            // set other cities state
+            const otherCityData = []
+            OTHER_CITIES.map((city)=>{
+                fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${city.lat}&lon=${city.lon}&units=${units}&appid=${KEY}`)
+                .then((response)=>response.json())
+                .then((data)=>{
+                    otherCityData.push({name:city.name, temperature:data.current.temp.toFixed(0), weather:data.current.weather})
+                })
+            })
+            setOthers(otherCityData)
+
+            // const list = data.daily.map(({day})=>({
+            //     name:,
+            //     temperature: temp,
+            //     weather: {
+            //         code: weather[0].icon,
+            //         name: weather[0].main
+            //     }
+            // }))
+            
         })  
         .finally(()=>{
             // 做到这一步，发现 state 定义在 Temperature 组件里，这里没办法setLoading，那就把状态提升
@@ -96,7 +111,7 @@ const WeatherCard = ()=>{
         <div className="bg-white rounded-3xl overflow-hidden shadow-2xl shadow-black/50">
             {/* current可能因为API读取不到而为空值，所以要加上？进行判断 */}
             {/* CurrentCityWeather的可读性可以再次提升，可以和Forecast和OtherCities组件一样，直接把整个current作为props传入，这样保证了代码的一致性 */}
-            <CurrentCityWeather tempValue={current?.tempValue} loading={loading} weatherValue={current?.weatherValue} humidityValue={current?.humidityValue} windSpeed={current?.windSpeed}/>
+            <CurrentCityWeather tempValue={current?.temp} loading={loading} weatherValue={current?.weather[0].main} humidityValue={current?.humidity} windSpeed={current?.wind_speed}/>
             {/* 给组件外面嵌套一个容器(比如<div>)，然后通过该容器来设置CSS。 */}
             <div className="flex gap-12 px-12 py-9 justify-center">
                 {/* OtherCities 和 Forecast的UI格式是一样的，都是 Title+Element, 这部分也可以提取出来，新增一个组件叫 SubSection */}

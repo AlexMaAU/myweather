@@ -8,7 +8,7 @@ const DayOfWeekList = ({dayOfWeek, temperature, weather, loading})=>{
             {loading?'...':(
                 <div>
                     <DayOfWeek dayOfWeek={dayOfWeek}/>
-                    <WeatherIcon weather={weather.name} code={weather.code} className={"my-4"}/>
+                    <WeatherIcon weather={weather.main} code={weather.icon} className={"my-4"}/>
                     <Temperature tempValue={temperature} className={"text-center text-base"}/>
                 </div>
             )}
