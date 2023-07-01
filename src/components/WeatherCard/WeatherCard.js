@@ -3,7 +3,6 @@ import Forecast from './components/Forecast';
 import OtherCities from './components/OtherCities';
 import SubSection from '../SubSection';
 import { useEffect, useState } from 'react';
-import KEY from '../../config/config';
 
 //通过geo.js获取了所有城市的经纬度
 const CITIES = [
