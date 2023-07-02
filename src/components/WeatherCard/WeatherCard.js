@@ -3,6 +3,9 @@ import Forecast from './components/Forecast';
 import OtherCities from './components/OtherCities';
 import SubSection from '../SubSection';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 
 //通过geo.js获取了所有城市的经纬度
 const CITIES = [
@@ -52,8 +55,18 @@ const WeatherCard = () => {
   const [forecast, setForecast] = useState();
   const [others, setOthers] = useState();
   const [currentCity, setCurrentCity] = useState(CURRENT_CITY);
+  const navigate = useNavigate();
 
-  console.log(currentCity);
+  // console.log(localStorage.getItem('token'));
+  const token = useSelector((state)=>state.auth.token)
+  console.log(token);
+
+  // const headers = {
+  //   Authorization: `Bearer ${localStorage.getItem('token')}`,
+  // };
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
 
   // fetch data with onecall api
   useEffect(() => {
@@ -63,8 +76,14 @@ const WeatherCard = () => {
      */
     // fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${currentCity.lat}&lon=${currentCity.lon}&units=${units}&appid=${KEY}`)
     // .then((response)=>response.json())  //接收上一个Promise返回的response对象，并调用json()方法将返回的数据解析为JSON格式
-    fetch(`http://127.0.0.1:4000/api/v1/weathers?lat=${currentCity.lat}&lon=${currentCity.lon}`)
-      .then((response) => response.json())  //在使用 fetch 函数的 .then() 方法处理响应时，回调函数的参数 data 是一个表示响应的 Response 对象，而不是实际的数据。使用 response.json() 方法将响应数据解析为 JSON 格式。
+    fetch(
+      `http://127.0.0.1:4000/api/v1/weathers?lat=${currentCity.lat}&lon=${currentCity.lon}`,
+      {
+        method: 'GET',
+        headers: headers,
+      }
+    )
+      .then((response) => response.json()) //在使用 fetch 函数的 .then() 方法处理响应时，回调函数的参数 data 是一个表示响应的 Response 对象，而不是实际的数据。使用 response.json() 方法将响应数据解析为 JSON 格式。
       .then((data) => {
         // set current state
         setCurrent(data.current);
@@ -90,6 +109,10 @@ const WeatherCard = () => {
         });
         setForecast(daily);
       })
+      .catch((error) => {
+        console.log(error)
+        navigate('/')  // if token verification failed, redirect to login page
+      })
       .finally(() => {
         // 做到这一步，发现 state 定义在 Temperature 组件里，这里没办法setLoading，那就把状态提升
         setLoading(false); //当全部数据加载完之后，改变loading状态，让页面显示内容从 loading 到 获取的数据
@@ -104,8 +127,14 @@ const WeatherCard = () => {
     //   ).join()}&units=${units}&appid=${KEY}`
     // )
     fetch(
-        `http://127.0.0.1:4000/api/v1/weathers/others?id=${OTHER_CITIES.map(({ id }) => id).join()}`
-      )
+      `http://127.0.0.1:4000/api/v1/weathers/others?id=${OTHER_CITIES.map(
+        ({ id }) => id
+      ).join()}`,
+      {
+        method: 'GET',
+        headers: headers,
+      }
+    )
       .then((response) => response.json()) //接收上一个Promise返回的response对象，并调用json()方法将返回的数据解析为JSON格式
       .then((data) => {
         console.log(data);
@@ -114,6 +143,10 @@ const WeatherCard = () => {
         );
         console.log(newData);
         setOthers(newData);
+      })
+      .catch((error) => {
+        console.log(error)
+        navigate('/')  // if token verification failed, redirect to login page
       })
       .finally(() => {
         setLoading(false); //当全部数据加载完之后，改变loading状态，让页面显示内容从 loading 到 获取的数据

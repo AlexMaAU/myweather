@@ -3,7 +3,7 @@ import Login from './Login';
 import Register from './Register';
 
 const Auth = () => {
-  const newUser = false;
+  const [newUser, setNewUser] = useState(false)
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   return (
@@ -14,6 +14,7 @@ const Auth = () => {
           handleUsername={setUsername}
           password={password}
           handlePassword={setPassword}
+          handleNewUser={setNewUser}
         />
       ) : (
         <Login
@@ -21,6 +22,7 @@ const Auth = () => {
           handleUsername={setUsername}
           password={password}
           handlePassword={setPassword}
+          handleNewUser={setNewUser}
         />
       )}
     </div>
