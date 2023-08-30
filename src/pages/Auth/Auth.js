@@ -7,7 +7,7 @@ const Auth = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   return (
-    <div className='bg-sky-300 h-screen flex justify-center items-center gap-x-5'>
+    <div className='bg-gradient-to-r from-sky-500 to-indigo-500 h-screen flex justify-center items-center gap-x-5'>
       {newUser ? (
         <Register
           username={username}

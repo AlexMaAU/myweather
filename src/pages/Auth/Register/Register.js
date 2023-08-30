@@ -48,7 +48,7 @@ const Register = ({
         />
         <button
           type='submit'
-          className='w-40 h-10 bg-sky-500 m-auto text-white rounded-xl hover:bg-sky-700'
+          className='w-40 h-10 bg-violet-600 m-auto text-white rounded-xl hover:bg-violet-900'
           onClick={(e) => {
             e.preventDefault();
             axios
@@ -76,9 +76,9 @@ const Register = ({
         Already have an account?{' '}
         <a
           href='#/'
-          className='text-sky-500 font-bold cursor-pointer hover:text-sky-700'
+          className='text-violet-200 font-bold cursor-pointer hover:text-violet-900'
           onClick={() => {
-            navigate('/auth/login')
+            handleNewUser(false);
           }}
         >
           Login here
