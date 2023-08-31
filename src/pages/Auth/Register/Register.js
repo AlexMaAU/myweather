@@ -53,7 +53,7 @@ const Register = ({
             e.preventDefault();
             axios
               .post(
-                'http://127.0.0.1:4000/api/v1/auth/register',
+                'https://myweatherbackend-g23m-dev.fl0.io/api/v1/auth/register',
                 {
                   username: username,
                   password: password,

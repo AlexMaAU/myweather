@@ -77,7 +77,7 @@ const WeatherCard = () => {
     // fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${currentCity.lat}&lon=${currentCity.lon}&units=${units}&appid=${KEY}`)
     // .then((response)=>response.json())  //接收上一个Promise返回的response对象，并调用json()方法将返回的数据解析为JSON格式
     fetch(
-      `http://127.0.0.1:4000/api/v1/weathers?lat=${currentCity.lat}&lon=${currentCity.lon}`,
+      `https://myweatherbackend-g23m-dev.fl0.io/api/v1/weathers?lat=${currentCity.lat}&lon=${currentCity.lon}`,
       {
         method: 'GET',
         headers: headers,
@@ -127,7 +127,7 @@ const WeatherCard = () => {
     //   ).join()}&units=${units}&appid=${KEY}`
     // )
     fetch(
-      `http://127.0.0.1:4000/api/v1/weathers/others?id=${OTHER_CITIES.map(
+      `https://myweatherbackend-g23m-dev.fl0.io/api/v1/weathers/others?id=${OTHER_CITIES.map(
         ({ id }) => id
       ).join()}`,
       {
